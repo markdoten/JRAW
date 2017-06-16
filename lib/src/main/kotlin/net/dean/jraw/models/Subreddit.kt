@@ -1,42 +1,45 @@
 package net.dean.jraw.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import net.dean.jraw.databind.UnixTimeDeserializer
+import com.squareup.moshi.Json
+import net.dean.jraw.databind.RedditModel
 import java.util.*
 
+@RedditModel(kind = KindConstants.SUBREDDIT)
 data class Subreddit(
     /**
      * How many accounts are active on this subreddit at one time. If [accountsActiveIsFuzzed], this will not be the
      * exact number of accounts.
      */
+    @Json(name = "accounts_active")
     val accountsActive: Int,
 
     /** If true, [accountsActive] will be inexact */
+    @Json(name = "accounts_active_is_fuzzed")
     val accountsActiveIsFuzzed: Boolean,
 
     /** How many minutes reddit hides new comments for */
+    @Json(name = "comment_score_hide_mins")
     val commentScoreHideMins: Int,
 
-    @JsonProperty("created_utc")
-    @JsonDeserialize(using = UnixTimeDeserializer::class)
+    @Json(name = "created_utc")
     override val created: Date,
 
     /** The result of "t5_" + [id] */
-    @JsonProperty("name")
+    @Json(name = "name")
     val fullName: String,
 
     /** A unique base-36 identifier for this Subreddit, e.g. "2qh0u" in the case of /r/pics */
     val id: String,
 
     /** A hex color used primarily to style the header of the mobile site */
+    @Json(name = "key_color")
     val keyColor: String,
 
     /** Language code, e.g. "en" for English */
     val lang: String,
 
     /** Name without the "/r/" prefix: "pics", "funny", etc. */
-    @JsonProperty("display_name")
+    @Json(name = "display_name")
     val name: String,
 
     /** If this subreddit contains mostly adult content */
@@ -49,63 +52,68 @@ data class Subreddit(
     val quarantine: Boolean,
 
     /** Sidebar content in raw Markdown */
-    @JsonProperty("description")
+    @Json(name = "description")
     val sidebar: String,
 
     /** Whether the subreddit supports Markdown spoilers */
+    @Json(name = "spoilers_enabled")
     val spoilersEnabled: Boolean,
 
     /** What type of submissions can be submitted to this subreddit */
+    @Json(name = "submission_type")
     val submissionType: SubmissionType,
 
     /** The text on the button that users click to submit a link */
+    @Json(name = "submit_link_label")
     val submitLinkLabel: String?,
 
     /** The text on the button that users click to submit a self post */
     val submitTextLabel: String?,
-    @JsonProperty("subreddit_type") val subredditAvailability: Type,
+    @Json(name = "subreddit_type") val subredditAvailability: Type,
 
     /** The amount of subscribers this subreddit has */
     val subscribers: Int,
 
     /** The suggested default comment sort */
+    @Json(name = "suggested_comment_sort")
     val suggestedCommentSort: CommentSort?,
 
     /** The URL to access this subreddit relative to reddit.com. For example, "/r/pics" */
     val url: String,
 
-    @JsonProperty("user_is_muted") val isUserMuted: Boolean,
-    @JsonProperty("user_is_banned") val isUserBanned: Boolean,
-    @JsonProperty("user_is_contributor") val isUserContributor: Boolean,
-    @JsonProperty("user_is_moderator") val isUserModerator: Boolean,
-    @JsonProperty("user_is_subscriber") val isUserIsSubscriber: Boolean,
+    @Json(name = "user_is_muted") val isUserMuted: Boolean?,
+    @Json(name = "user_is_banned") val isUserBanned: Boolean?,
+    @Json(name = "user_is_contributor") val isUserContributor: Boolean?,
+    @Json(name = "user_is_moderator") val isUserModerator: Boolean?,
+    @Json(name = "user_is_subscriber") val isUserIsSubscriber: Boolean?,
 
-    /** If this subreddit's wiki is enabled */
-    val wikiEnabled: Boolean
-) : Thing(ThingType.SUBREDDIT), Created {
+    /** If this subreddit's wiki is enabled. A value of null means that the wiki is not enabled. */
+    @Json(name = "wiki_enabled")
+    val wikiEnabled: Boolean?
+) : RedditObject(KindConstants.SUBREDDIT), Created {
 
     enum class Type {
         /** Open to all users */
-        @JsonProperty("public") PUBLIC,
+        @Json(name = "public") PUBLIC,
         /** Only approved members can view and submit */
-        @JsonProperty("private") PRIVATE,
+        @Json(name = "private") PRIVATE,
         /** Anyone can view, but only some are approved to submit links */
-        @JsonProperty("restricted") RESTRICTED,
+        @Json(name = "restricted") RESTRICTED,
         /** Only users with reddit gold can post */
-        @JsonProperty("gold_restricted") GOLD_RESTRICTED,
-        @JsonProperty("archived") ARCHIVED
+        @Json(name = "gold_restricted") GOLD_RESTRICTED,
+        @Json(name = "archived") ARCHIVED
     }
 
     /** An enumeration of how a subreddit can restrict the type of submissions that can be posted  */
     enum class SubmissionType {
         /** Links and self posts  */
-        @JsonProperty("any") ANY,
+        @Json(name = "any") ANY,
         /** Only links  */
-        @JsonProperty("link") LINK,
+        @Json(name = "link") LINK,
         /** Only self posts  */
-        @JsonProperty("self") SELF,
+        @Json(name = "self") SELF,
         /** Restricted subreddit  */
-        @JsonProperty("none") NONE
+        @Json(name = "none") NONE
     }
 }
 

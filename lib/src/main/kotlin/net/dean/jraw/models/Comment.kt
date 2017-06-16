@@ -1,9 +1,7 @@
 package net.dean.jraw.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import net.dean.jraw.databind.DistinguishedStatusDeserializer
-import net.dean.jraw.databind.UnixTimeDeserializer
+import com.squareup.moshi.Json
+import net.dean.jraw.databind.RedditModel
 import java.util.*
 
 /**
@@ -15,6 +13,7 @@ import java.util.*
  * val firstTopLevelComment: Comment = reddit.submission(id).comments().replies[0].comment
  * ```
  */
+@RedditModel(kind = KindConstants.COMMENT)
 data class Comment(
     /** If this comment belongs to a Submission which has been marked as unmodifiable */
     val archived: Boolean,
@@ -38,19 +37,16 @@ data class Comment(
     val controversiality: Int,
 
     /** When this comment was created */
-    @JsonProperty("created_utc")
-    @JsonDeserialize(using = UnixTimeDeserializer::class)
+    @Json(name = "created_utc")
     override val created: Date,
 
-    @JsonDeserialize(using = DistinguishedStatusDeserializer::class)
     override val distinguished: DistinguishedStatus?,
 
     /** When this comment was edited, if any */
-    @JsonDeserialize(using = UnixTimeDeserializer::class)
     val edited: Date?,
 
     /** The full name of the comment (`t1_` + [id]) */
-    @JsonProperty("name")
+    @Json(name = "name")
     val fullName: String,
 
     /** How many times this comment was given reddit Gold */
@@ -67,23 +63,25 @@ data class Comment(
     override val score: Int,
 
     /** If reddit is masking the score of a new comment */
+    @Json(name = "score_hidden")
     val scoreHidden: Boolean,
 
     /** If this comment is shown at the top of the comment section, regardless of score */
     val stickied: Boolean,
 
     /** The full name of the submission that this comment is contained in (`t3_XXXXX`) */
-    @JsonProperty("link_id")
+    @Json(name = "link_id")
     val submissionFullName: String,
 
     /** The name of the subreddit (e.g. "pics") */
-    @JsonProperty("subreddit")
+    @Json(name = "subreddit")
     val subredditName: String,
 
     /** The subreddit's full name */
-    @JsonProperty("subreddit_id")
+    @Json(name = "subreddit_id")
     val subredditFullName: String,
 
     /** The restrictions for accessing this subreddit */
+    @Json(name = "subreddit_type")
     val subredditType: Subreddit.Type
-) : Thing(ThingType.COMMENT), Created, Distinguishable, Votable
+) : RedditObject(KindConstants.COMMENT), Created, Distinguishable, Votable

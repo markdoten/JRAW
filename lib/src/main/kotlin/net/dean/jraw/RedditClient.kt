@@ -1,6 +1,5 @@
 package net.dean.jraw
 
-import com.fasterxml.jackson.databind.JsonNode
 import net.dean.jraw.http.*
 import net.dean.jraw.http.oauth.OAuthData
 import net.dean.jraw.ratelimit.LeakyBucketRateLimiter
@@ -124,7 +123,7 @@ class RedditClient(
     fun request(configure: (stub: HttpRequest.Builder) -> HttpRequest.Builder) = request(configure(requestStub()).build())
 
     @EndpointImplementation(arrayOf(Endpoint.GET_ME))
-    fun me(): JsonNode = request { it.path("/api/v1/me") }.json
+    fun me() = request { it.path("/api/v1/me") }
 
     /** Creates a [SubredditReference] */
     fun subreddit(name: String) = SubredditReference(this, name)

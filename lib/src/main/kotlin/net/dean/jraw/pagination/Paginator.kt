@@ -2,12 +2,12 @@ package net.dean.jraw.pagination
 
 import net.dean.jraw.RedditClient
 import net.dean.jraw.models.Listing
+import net.dean.jraw.models.RedditObject
 import net.dean.jraw.models.Sorting
-import net.dean.jraw.models.Thing
 import net.dean.jraw.models.TimePeriod
 import net.dean.jraw.references.AbstractReference
 
-class Paginator<T : Thing> private constructor(
+class Paginator<T : RedditObject> private constructor(
     reddit: RedditClient,
     baseUrl: String,
     val timePeriod: TimePeriod,
@@ -68,7 +68,7 @@ class Paginator<T : Thing> private constructor(
         override fun next() = this@Paginator.next()
     }
 
-    class Builder<T : Thing> internal constructor(val reddit: RedditClient, val baseUrl: String) {
+    class Builder<T : RedditObject> internal constructor(val reddit: RedditClient, val baseUrl: String) {
         private var timePeriod: TimePeriod = DEFAULT_TIME_PERIOD
         private var sorting = DEFAULT_SORTING
         private var limit = DEFAULT_LIMIT // reddit returns 25 items when no limit parameter is passed

@@ -1,5 +1,6 @@
 package net.dean.jraw.http.oauth
 
+import net.dean.jraw.JrawUtils
 import net.dean.jraw.RedditClient
 import net.dean.jraw.http.HttpAdapter
 import net.dean.jraw.http.HttpRequest

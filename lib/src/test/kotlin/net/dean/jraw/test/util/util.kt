@@ -79,7 +79,6 @@ data class MockHttpResponse(
 /** Creates a totally BS OAuthData object */
 fun createMockOAuthData() = OAuthData(
     accessToken = "<access_token>",
-    tokenType = "bearer", // normal OAuthData has this as well, might as well keep it
     scopes = listOf("*"), // '*' means all scopes
     shelfLife = -1
 )

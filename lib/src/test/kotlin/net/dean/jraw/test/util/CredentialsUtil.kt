@@ -1,8 +1,6 @@
 package net.dean.jraw.test.util
 
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import net.dean.jraw.JrawUtils
 import net.dean.jraw.http.oauth.Credentials
 import java.util.*
 
@@ -43,15 +41,13 @@ object CredentialsUtil {
 
     private fun getLocalCredentials(): TestingCredentials {
         try {
-            return jacksonObjectMapper().readValue<TestingCredentials>(getLocalCredentialStream())
+            return JrawUtils.parseJson(getLocalCredentialStream())
         } catch (e: Exception) {
             // If there's an error in CredentialsUtil's init block, a NoClassDefFoundError will be thrown instead of the
             // real cause, this error right here. Make sure the user knows about it.
-            if (e is MissingKotlinParameterException) {
-                System.err.println("credentials.json: missing property '${e.parameter.name}'")
-            } else {
-                System.err.println("${e.javaClass.name}: ${e.message}")
-            }
+//            if (e is MissingKotlinParameterException) {
+//                System.err.println("credentials.json: missing property '${e.parameter.name}'")
+            System.err.println("${e.javaClass.name}: ${e.message}")
             throw e
         }
     }

@@ -8,11 +8,11 @@ import net.dean.jraw.models.TimePeriod
 import net.dean.jraw.pagination.Paginator
 import net.dean.jraw.test.util.TestConfig.reddit
 import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.api.dsl.xdescribe
 
 class SubredditPaginationTest : Spek({
-    describe("Builder.build()") {
+    xdescribe("Builder.build()") {
         it("should keep the settings from the builder") {
             // Just make sure deserialization it doesn't fail for now
             val builder = reddit.subreddit("pics").posts()
@@ -29,7 +29,7 @@ class SubredditPaginationTest : Spek({
         }
     }
 
-    describe("next()") {
+    xdescribe("next()") {
         it("should update the current page and current listing") {
             val limit = 10
             val ref = reddit.subreddit("pics").posts()
@@ -79,7 +79,7 @@ class SubredditPaginationTest : Spek({
         }
     }
 
-    describe("newBuilder()") {
+    xdescribe("newBuilder()") {
         it("should create a Builder with the same settings as the original Reference") {
             val ref = reddit.subreddit("foo").posts()
                 .limit(5)

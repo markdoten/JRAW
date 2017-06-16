@@ -1,23 +1,25 @@
 package net.dean.jraw
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import net.dean.jraw.databind.ListingDeserializer
-import net.dean.jraw.databind.RedditObjectDeserializer
+import com.squareup.moshi.KotlinJsonAdapterFactory
+import com.squareup.moshi.Moshi
+import net.dean.jraw.databind.OAuthDataAdapter
+import net.dean.jraw.databind.RedditModelJsonAdapter
+import net.dean.jraw.databind.UnixDateAdapter
+import okio.Okio
+import java.io.InputStream
 
 object JrawUtils {
-    @JvmStatic internal fun defaultObjectMapper(): ObjectMapper = ObjectMapper()
-        .registerKotlinModule()
-        // Use snake case by default because that's what reddit uses
-        .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
+    @JvmStatic val moshi: Moshi = Moshi.Builder()
+        .add(OAuthDataAdapter())
+        .add(UnixDateAdapter())
+        .add(KotlinJsonAdapterFactory())
+        // This one has to be last for whatever reason
+        .add(RedditModelJsonAdapter.Factory())
+        .build()
 
-    @JvmStatic val jackson: ObjectMapper = defaultObjectMapper()
-        .registerModule(RedditObjectDeserializer.Module)
-        .registerModule(ListingDeserializer.Module)
-
-    @JvmStatic fun parseJson(json: String): JsonNode = jackson.readTree(json)!!
+//    @JvmStatic fun parseJson(str: String): Map<String, Any> = moshi.adapter<JsonNode>(jsonNodeType).fromJson(str)!!
+    @JvmStatic inline fun <reified T> parseJson(str: String): T = moshi.adapter<T>(T::class.java).fromJson(str)!!
+    @JvmStatic inline fun <reified T> parseJson(stream: InputStream): T = moshi.adapter<T>(T::class.java).fromJson(Okio.buffer(Okio.source(stream)))!!
 
     @JvmStatic fun parseUrlEncoded(str: String): Map<String, String> =
         // Neat little one-liner. This function splits the query string by '&', then maps each value to a Pair of

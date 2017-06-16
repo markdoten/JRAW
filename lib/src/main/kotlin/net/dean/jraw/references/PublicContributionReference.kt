@@ -3,7 +3,6 @@ package net.dean.jraw.references
 import net.dean.jraw.Endpoint
 import net.dean.jraw.EndpointImplementation
 import net.dean.jraw.RedditClient
-import net.dean.jraw.models.ThingType
 import net.dean.jraw.models.VoteDirection
 
 /**
@@ -12,7 +11,7 @@ import net.dean.jraw.models.VoteDirection
  * Provides methods for [upvoting][upvote], [downvoting][downvote], and [removing the current vote][unvote], and also
  * one method for [manually setting the vote direction by enum value][setVote].
  */
-abstract class PublicContributionReference internal constructor(reddit: RedditClient, id: String, val type: ThingType) :
+abstract class PublicContributionReference internal constructor(reddit: RedditClient, id: String, val typePrefix: String) :
     AbstractReference<String>(reddit, id) {
 
     /** Equivalent to `setVote(VoteDirection.UP)` */
@@ -42,7 +41,7 @@ abstract class PublicContributionReference internal constructor(reddit: RedditCl
         reddit.request {
             it.endpoint(Endpoint.POST_VOTE).post(mapOf(
                 "dir" to value.toString(),
-                "id" to type.prefix + '_' + subject
+                "id" to typePrefix + '_' + subject
             ))
         }
     }

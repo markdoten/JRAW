@@ -20,11 +20,11 @@ class SubredditTest : Spek({
         }
     }
 
-    describe("randomSubmission") {
-        it("should retrieve a random submission") {
-            val links = (0..1).map { sub.randomSubmission().submission }
-            // Pretty unlikely reddit will send us back the exact same submission twice in a row
-            links[0].id.should.not.equal(links[1].id)
-        }
-    }
+//    describe("randomSubmission") {
+//        it("should retrieve a random submission") {
+//            val links = (0..1).map { sub.randomSubmission().submission }
+//            // Pretty unlikely reddit will send us back the exact same submission twice in a row
+//            links[0].id.should.not.equal(links[1].id)
+//        }
+//    }
 })
