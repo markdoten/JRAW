@@ -28,7 +28,7 @@ class DeserializationTest : Spek({
             { listOf(it.randomSubreddit().about()) }
         )
 //        Submission::class to arrayOf<DeserializeTest>(
-//            { subredditPosts(it, "pics") },
+//            { subredditPosts(it, "pics") }
 //            { subredditPosts(it, "redditdev") },
 //            { subredditPosts(it, "random") }
 //        )

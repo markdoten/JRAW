@@ -1,7 +1,10 @@
 package net.dean.jraw.http
 
+import com.squareup.moshi.Types
 import net.dean.jraw.JrawUtils
 import net.dean.jraw.databind.Enveloped
+import net.dean.jraw.models.Listing
+import net.dean.jraw.models.RedditObject
 
 /**
  * This class forms a bridge from an [HttpAdapter] implementation to the HTTP library's response class
@@ -40,5 +43,10 @@ data class HttpResponse(
 
     inline fun <reified T> deserializeRedditModel(): T {
         return JrawUtils.moshi.adapter<T>(T::class.java, Enveloped::class.java).fromJson(body)!!
+    }
+
+    fun <T : RedditObject> deserializeListing(clazz: Class<T>): Listing<T> {
+        val type = Types.newParameterizedType(Listing::class.java, clazz)
+        return JrawUtils.moshi.adapter<Listing<T>>(type, Enveloped::class.java).fromJson(body)!!
     }
 }

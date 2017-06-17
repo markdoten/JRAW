@@ -2,6 +2,7 @@ package net.dean.jraw
 
 import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
+import net.dean.jraw.databind.EnvelopedListAdapterFactory
 import net.dean.jraw.databind.OAuthDataAdapter
 import net.dean.jraw.databind.RedditModelJsonAdapter
 import net.dean.jraw.databind.UnixDateAdapter
@@ -13,8 +14,8 @@ object JrawUtils {
         .add(OAuthDataAdapter())
         .add(UnixDateAdapter())
         .add(KotlinJsonAdapterFactory())
-        // This one has to be last for whatever reason
         .add(RedditModelJsonAdapter.Factory())
+        .add(EnvelopedListAdapterFactory())
         .build()
 
 //    @JvmStatic fun parseJson(str: String): Map<String, Any> = moshi.adapter<JsonNode>(jsonNodeType).fromJson(str)!!

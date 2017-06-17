@@ -7,4 +7,6 @@ object KindConstants {
     const val SUBREDDIT =      "t5"
     const val AWARD =          "t6"
     const val PROMO_CAMPAIGN = "t8"
+
+    const val LISTING =        "Listing"
 }

@@ -24,7 +24,7 @@ class SubredditReference internal constructor(reddit: RedditClient, subreddit: S
      * Creates a new [Paginator.Builder] to iterate over this subreddit's posts.
      */
     @EndpointImplementation(arrayOf(Endpoint.GET_HOT, Endpoint.GET_NEW, Endpoint.GET_RISING, Endpoint.GET_SORT))
-    fun posts() = Paginator.Builder<Submission>(reddit, "/r/$subject")
+    fun posts() = Paginator.Builder(reddit, "/r/$subject", Submission::class.java)
 
     // TODO
 //    /**

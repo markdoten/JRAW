@@ -1,5 +1,8 @@
 package net.dean.jraw.models
 
+import net.dean.jraw.databind.Enveloped
+import net.dean.jraw.databind.RedditModel
+
 /**
  * A Listing is how reddit handles pagination.
  *
@@ -8,10 +11,11 @@ package net.dean.jraw.models
  * `listing.indexOf(foo)` is the same as `listing.children.indexOf(foo)`. Note that Kotlin lists are immutable by
  * default.
  */
+@RedditModel(kind = KindConstants.LISTING)
 data class Listing<T : RedditObject>(
     val after: String?,
     val before: String?,
-    val children: List<T>
+    @Enveloped val children: List<T>
 ) : List<T> {
     // kotlin.collections.List inherited methods and properties
     override val size: Int = children.size

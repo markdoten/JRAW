@@ -8,6 +8,7 @@ import net.dean.jraw.models.TimePeriod
 import net.dean.jraw.references.AbstractReference
 
 class Paginator<T : RedditObject> private constructor(
+    private val clazz: Class<T>,
     reddit: RedditClient,
     baseUrl: String,
     val timePeriod: TimePeriod,
@@ -43,7 +44,7 @@ class Paginator<T : RedditObject> private constructor(
                 .query(args)
         }
 
-        _current = response.deserialize()
+        _current = response.deserializeListing(clazz)
         _pageNumber++
 
         return _current!!
@@ -58,7 +59,7 @@ class Paginator<T : RedditObject> private constructor(
     /**
      * Constructs a new [Builder] with the current pagination settings
      */
-    fun newBuilder() = Builder<T>(reddit, subject)
+    fun newBuilder() = Builder(reddit, subject, clazz)
         .sorting(sorting)
         .timePeriod(timePeriod)
         .limit(limit)
@@ -68,7 +69,7 @@ class Paginator<T : RedditObject> private constructor(
         override fun next() = this@Paginator.next()
     }
 
-    class Builder<T : RedditObject> internal constructor(val reddit: RedditClient, val baseUrl: String) {
+    class Builder<T : RedditObject> internal constructor(val reddit: RedditClient, val baseUrl: String, val clazz: Class<T>) {
         private var timePeriod: TimePeriod = DEFAULT_TIME_PERIOD
         private var sorting = DEFAULT_SORTING
         private var limit = DEFAULT_LIMIT // reddit returns 25 items when no limit parameter is passed
@@ -77,7 +78,7 @@ class Paginator<T : RedditObject> private constructor(
         fun timePeriod(timePeriod: TimePeriod): Builder<T> { this.timePeriod = timePeriod; return this }
         fun limit(limit: Int): Builder<T> { this.limit = limit; return this }
 
-        fun build() = Paginator<T>(reddit, baseUrl, timePeriod, sorting, limit)
+        fun build() = Paginator(clazz, reddit, baseUrl, timePeriod, sorting, limit)
     }
 
     companion object {
