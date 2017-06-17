@@ -21,6 +21,7 @@ class EnvelopedListAdapterFactory : JsonAdapter.Factory {
     }
 
     companion object {
+        // Probably a better way to do this
         const val NAME = "java.util.List"
     }
 

@@ -3,6 +3,21 @@ package net.dean.jraw.databind
 import com.squareup.moshi.*
 import java.lang.reflect.Type
 
+/**
+ * Creates JsonAdapters for a class annotated with [RedditModel].
+ *
+ * This class assumes that the data is encapsulated in an envelope like this:
+ *
+ * ```json
+ * {
+ *   "kind": "<kind>",
+ *   "data": { ... }
+ * }
+ * ```
+ *
+ * The created adapter will ensure that the value of the `kind` node and [RedditModel.kind] match exactly and then
+ * return the contents of the `data` node.
+ */
 class RedditModelJsonAdapterFactory : JsonAdapter.Factory {
     override fun create(type: Type, annotations: MutableSet<out Annotation>, moshi: Moshi): JsonAdapter<*>? {
         val rawType = Types.getRawType(type)
@@ -27,6 +42,8 @@ class RedditModelJsonAdapterFactory : JsonAdapter.Factory {
 
         override fun fromJson(reader: JsonReader?): Any? {
             val result = delegate.fromJson(reader) ?: return null
+
+            // Verify kind
             if (result.kind != expectedKind)
                 throw IllegalArgumentException("Expected `kind` of '$expectedKind', got '${result.kind}'")
             return result.data
