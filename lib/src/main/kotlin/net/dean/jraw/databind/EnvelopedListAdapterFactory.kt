@@ -23,19 +23,19 @@ class EnvelopedListAdapterFactory : JsonAdapter.Factory {
     companion object {
         const val NAME = "java.util.List"
     }
-}
 
-private class EnvelopedListAdapter(private val delegate: JsonAdapter<Any>) : JsonAdapter<List<*>>() {
-    override fun toJson(writer: JsonWriter?, value: List<*>?) {
-        TODO("not implemented")
-    }
+    private class EnvelopedListAdapter(private val delegate: JsonAdapter<Any>) : JsonAdapter<List<*>>() {
+        override fun toJson(writer: JsonWriter?, value: List<*>?) {
+            TODO("not implemented")
+        }
 
-    override fun fromJson(reader: JsonReader): List<*>? {
-        val list: MutableList<Any?> = ArrayList()
-        reader.beginArray()
-        while (reader.hasNext())
-            list.add(delegate.fromJson(reader))
-        reader.endArray()
-        return list
+        override fun fromJson(reader: JsonReader): List<*>? {
+            val list: MutableList<Any?> = ArrayList()
+            reader.beginArray()
+            while (reader.hasNext())
+                list.add(delegate.fromJson(reader))
+            reader.endArray()
+            return list
+        }
     }
 }

@@ -4,7 +4,7 @@ import com.squareup.moshi.KotlinJsonAdapterFactory
 import com.squareup.moshi.Moshi
 import net.dean.jraw.databind.EnvelopedListAdapterFactory
 import net.dean.jraw.databind.OAuthDataAdapter
-import net.dean.jraw.databind.RedditModelJsonAdapter
+import net.dean.jraw.databind.RedditModelJsonAdapterFactory
 import net.dean.jraw.databind.UnixDateAdapter
 import okio.Okio
 import java.io.InputStream
@@ -14,7 +14,7 @@ object JrawUtils {
         .add(OAuthDataAdapter())
         .add(UnixDateAdapter())
         .add(KotlinJsonAdapterFactory())
-        .add(RedditModelJsonAdapter.Factory())
+        .add(RedditModelJsonAdapterFactory())
         .add(EnvelopedListAdapterFactory())
         .build()
 

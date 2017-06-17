@@ -7,7 +7,7 @@ import com.winterbe.expekt.should
 import net.dean.jraw.databind.Enveloped
 import net.dean.jraw.databind.EnvelopedListAdapterFactory
 import net.dean.jraw.databind.RedditModel
-import net.dean.jraw.databind.RedditModelJsonAdapter
+import net.dean.jraw.databind.RedditModelJsonAdapterFactory
 import net.dean.jraw.models.RedditObject
 import org.intellij.lang.annotations.Language
 import org.jetbrains.spek.api.Spek
@@ -32,7 +32,7 @@ class MoshiTest : Spek({
     beforeEachTest {
         moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
-            .add(RedditModelJsonAdapter.Factory())
+            .add(RedditModelJsonAdapterFactory())
             .add(EnvelopedListAdapterFactory())
             .build()
     }
