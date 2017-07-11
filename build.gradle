@@ -51,11 +51,11 @@ task fatJar(type: Jar, dependsOn: assemble) {
     )
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    destinationDir = releaseDest
-    from javadoc.destinationDir
-}
+// task javadocJar(type: Jar, dependsOn: javadoc) {
+//     classifier = 'javadoc'
+//     destinationDir = releaseDest
+//     from javadoc.destinationDir
+// }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
@@ -70,16 +70,17 @@ task renamePom(dependsOn: 'generatePomFileForMavenPublication') {
     }
 }
 
-task release(type: Jar, dependsOn: ['fatJar', 'javadocJar', 'sourcesJar', 'renamePom']) {
+// task release(type: Jar, dependsOn: ['fatJar', 'javadocJar', 'sourcesJar', 'renamePom']) {
+task release(type: Jar, dependsOn: ['fatJar', 'sourcesJar', 'renamePom']) {
     from sourceSets.main.output
     destinationDir = releaseDest
 }
 
-javadoc {
-    def overrideVersion = System.properties.'javadoc-version'
-    def version = overrideVersion != null ? overrideVersion : project.version
-    title = "${project.name} $version API"
-}
+// javadoc {
+//     def overrideVersion = System.properties.'javadoc-version'
+//     def version = overrideVersion != null ? overrideVersion : project.version
+//     title = "${project.name} $version API"
+// }
 
 test {
     useTestNG()
@@ -121,7 +122,7 @@ publishing {
 
 artifacts {
     archives sourcesJar
-    archives javadocJar
+    // archives javadocJar
 }
 
 defaultTasks "test"
