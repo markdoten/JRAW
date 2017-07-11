@@ -1,9 +1,15 @@
 package net.dean.jraw.models;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import net.dean.jraw.util.JrawUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.dean.jraw.models.meta.JsonProperty;
+import net.dean.jraw.util.JrawUtils;
 
+import java.lang.ClassNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -19,8 +25,8 @@ import java.util.List;
  * This class provides an abstract model for retrieving data from a JSON node, although not necessarily relating to the
  * reddit API.
  */
-public abstract class JsonModel {
-    protected final JsonNode data;
+public abstract class JsonModel implements Serializable {
+    protected JsonNode data;
     /** The maximum length of a result of a {@link JsonProperty} method in {@link #toString()} */
     private static final int MAX_STRING_LENGTH = 500;
     private static final String ELLIPSIS = "(...)";
@@ -285,5 +291,13 @@ public abstract class JsonModel {
         }
 
         return methods;
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.writeUTF(new ObjectMapper().writeValueAsString(data));
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        data = new ObjectMapper().readTree(in.readUTF());
     }
 }
